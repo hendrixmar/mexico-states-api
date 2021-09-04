@@ -1,13 +1,11 @@
-# MKAD distance API
-## _Simple implementation, but does the job_
+# Mexico states API
+## _A Trie to search_
 
 
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-MKAD distance API gives you the distance between the address 
- passed to the application in an HTTP request and the Moscow Ring Road (also known as MKAD). 
-The information of the address is obtained by using the Yandex Geocode API.
+This API filter the different states from Mexico depending your input. The filter is case insensitive and it even search by suffix pattern.
 
 
 
@@ -17,22 +15,20 @@ The information of the address is obtained by using the Yandex Geocode API.
 The API is works with the following libraries
 
 - [Flask] - Micro web framework written in Python
-- [numpy] - Python library used for working with arrays
-- [shapely] - Python package for manipulation and analysis of planar geometric objects
+- [suffix-tree] - A Generalized Suffix Tree for any Python iterable, with Lowest Common Ancestor retrieval.
 - [pytest] -  Testing tool that helps you write better programs.
-- [requests] - a simple, yet elegant, HTTP library.
 
 
 ## DEMO
 
-If you want to test this api you can try by using this link and replacing the address parameter a location name
+If you want to test this api you can try by using this link and replacing the filter parameter a location name
 
-https://hendrikneuro.herokuapp.com/distance/**Address**
+https://mexico-states-api.herokuapp.com/filter/***filter***
 
 
 ## Installation
 
-MKAD API requires [Python](https://nodejs.org/) 3.8 or above to run.
+You need [Python](https://nodejs.org/) 3.8 or above to run.
 
 Install the dependencies that are the in the requirement file
 
@@ -45,7 +41,7 @@ pip install requirements.txt
 
 ## Docker
 
-MKAD API is very easy to install and deploy in a Docker container.
+It is very easy to install and deploy in a Docker container.
 
 By default, the Docker will expose port 8080, so change this within the
 Dockerfile if necessary. In my case I had to modify the port number by getting it from 
@@ -65,61 +61,36 @@ if __name__ == '__main__':
 
 
 ```shell
-$ docker build -t <your username>/flask-docker .
-
-$ docker run -it -p 2000:5000 <your username>/flask-docker
+docker build -t <your username>/flask-docker .
 ```
-
+```shell
+docker run -it -p 2000:5000 <your username>/flask-docker
+```
 I deployed the application to Heroku. If you want to use the same platform create your account and execute the following commands. Deploying in heroku is pretty straightforward.
 
-```sh
-$ heroku login
-
-$ heroku create <app-name>
-
-$ heroku container:push web --app <app-name>
-
-$ heroku container:release web --app <app-name>
+```shell
+heroku login
+```
+```shell
+heroku create <app-name>
+```
+```shell
+heroku container:push web --app <app-name>
+```
+```shell
+heroku container:release web --app <app-name>
 ```
 If you want to access to the logs file of the Docker container use the following command.
-````shell
-$ heroku run bash
-````
+```shell
+heroku run bash
+```
 
 ## How it works?
-![Earth great circle](https://i.imgur.com/iD3X3Ax.png)
 
-The first problem was how to measure the distance between two coordinates points.
-So I thought to use euclidean distance but that will make no sense because I'm not flat-Earther, so I searched for a more viable solution. After some research I found the haversine formula gives great-circle distances between two points on a sphere from their longitudes and latitudes. The sphere in this case is the surface of the Earth.
-
-
-![Earth great circle](https://i2.wp.com/macalupu.com/wp-content/uploads/2019/03/haversineFormula.png?w=878&ssl=1)
-
-The next step was to determine if the coordinate location address is inside the Moscow Ring Road. 
-My first approach to tackle this challenge was to take advantage of the metadata data that Yandex API returns. And compare the list of all the districts that are inside the MKAD with the district of the address.
-But I found another approach. The idea was to get all the coordinate points that surround the region to see it as a polygon and then apply an algorithm to identify if the point is inside of it
-
-![Test Image 2](images/mkad_map.png?raw=true)
-
-
-I used the website https://www.findlatitudeandlongitude.com/ to get the coordinates points and to make the work of saving the points quicker I created a Javascript function that store coordinates
-in a list after pressing the button "A" and if you have miss clicked you can erase the last data saved by pressing "D". To make it works you only need to open the dev tools and paste it in the console to make it work. Dont worry it doesnt do anything else than extracting and saving points.
-````js
-
-let points = []
-document.addEventListener('keyup', (e) => {
-  
-    if (e.code === "KeyA"){
-        let longitude = document.getElementsByClassName("text coordinate")[1].value;
-        let latitude = document.getElementsByClassName("text coordinate")[0].value;
-        console.log(`Inserted: ${latitude},${longitude}`)
-        points.push([longitude, latitude]);
-    }else if (e.code === "KeyD"){
-        let temp = points.pop();
-        console.log(`Deleted: ${temp[0]},${temp[1]}`)
-    }
-  });
-````
+To solve this problems I used the Ukkonen's algorithm.
+The Ukkonen's algorithm is a method of constructing the suffix tree of a string in linear time. Suffix trees are useful because they can efficiently answer many questions about a string, such as how many times a given substring occurs within the string. 
+For this prooject I used the suffix tree package.
+If you want to heard a more detailed explanatation of how the algorithm works you can read this [stackoverflow post](https://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english).
 
 ## License
 
@@ -131,7 +102,7 @@ MIT
 
    [Flask]: <https://github.com/pallets/flask>
    [numpy]: <https://github.com/numpy/numpy>
-   [shapely]: <https://github.com/Toblerity/Shapely>
+   [suffix-tree]: <https://pypi.org/project/suffix-tree/>
    [pytest]: <https://github.com/pytest-dev/pytest>
    [requests]: <https://github.com/psf/requests>
    [python]: <>
