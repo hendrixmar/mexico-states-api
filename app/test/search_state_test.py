@@ -1,27 +1,65 @@
+import os
 import string
 import random
 import re
+import platform
+from suffix_tree import Tree
 import pytest
+import json
+
+def load_states_suffix_tree(json_file : str):
+	"""
+	      Build the suffix tree using Ukkonen’s algorithm
+	          :param json_file:
+	          :return: suffix tree, states metadata
+	"""
+	cwd = os.getcwd()
+	if platform.system() == "Windows":
+		path = f"{cwd}\\app\\test\\{json_file}"
+	else:
+
+		path = f"{cwd}/app/test/{json_file}"
+
+	with open(path) as f:
+		metadata = json.load(f)
+
+	return Tree(metadata), metadata
+
+def brute_force(metadata : {}, search_string : str):
+
+	output = set()
+	for i in metadata.values():
+
+		if search_string.upper() in i:
+
+			output.add(i.capitalize() )
 
 
-def sanitize_string(input_string: str) -> str:
-	return re.sub(r'[\\\!"\#\$%\&\'()\*,-./\:;<=>\?\@\[\]^^_`\{\|\}~+¡0-9]+', " ", input_string).upper()
+	return output
 
 
 def test_answer():
-	counter = 1
+	state_suffix_tree, metadata = load_states_suffix_tree("mexico_states.json")
 
-	letters = "".join(
-		[string.ascii_uppercase, string.ascii_lowercase, string.ascii_letters, string.punctuation, string.digits])
 	for _ in range(200):
-		# printing lowercase
-		letters = string.ascii_lowercase
 
-		test_case = ''.join(random.choice(letters) for i in range(50))
+		state = random.choice(list(metadata.values()))
+		a = random.randint(0,len(state) // 2)
+		b =  random.randint(a + 1, len(state))
 
-		result = sanitize_string(test_case)
+		search_test = state[a:b]
 
-		if not re.match("[a-zA-Z]+", result):
-			pytest.fail(f"Test case {counter}: {result}")
+		result = set([metadata[state_code].capitalize() for state_code, _ in state_suffix_tree.find_all(search_test)])
 
-		counter += 1
+		answer = brute_force(metadata, search_test)
+
+		if answer != result:
+			pytest.fail(f"Test case {_}: {result} -->> correct {answer}")
+
+
+
+
+
+
+
+

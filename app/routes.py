@@ -21,5 +21,5 @@ def filter_states(argument: str):
 
 @bp.route('/')
 def get_all_states():
-    return metadata
+    return { code : state.capitalize() for code, state in metadata.items() }
 
