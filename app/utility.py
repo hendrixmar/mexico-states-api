@@ -3,6 +3,7 @@ import logging
 import json
 from suffix_tree import Tree
 import os
+import platform
 
 logging.basicConfig(filename='mexico_states_api.log', level=logging.INFO,
 					format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
@@ -20,8 +21,13 @@ def load_states_suffix_tree(json_file : str):
 	          :return: suffix tree, states metadata
 	"""
 	cwd = os.getcwd()
+	if platform.system() == "Windows":
+		path = f"{cwd}\\{json_file}"
+	else:
+		json_file = json_file.replace("\\", "/")
+		path = f"{cwd}/{json_file}"
 
-	with open(f"{cwd}\\{json_file}") as f:
+	with open(path) as f:
 		metadata = json.load(f)
 
 	return Tree(metadata), metadata
