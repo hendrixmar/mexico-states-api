@@ -33,7 +33,7 @@ You need [Python](https://nodejs.org/) 3.8 or above to run.
 Install the dependencies that are the in the requirement file
 
 ```sh
-cd MoscowRingRoad
+cd mexico-states-api
 pip install requirements.txt
 ```
 
@@ -105,7 +105,6 @@ MIT
    [suffix-tree]: <https://pypi.org/project/suffix-tree/>
    [pytest]: <https://github.com/pytest-dev/pytest>
    [requests]: <https://github.com/psf/requests>
-   [python]: <>
    [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
    [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
