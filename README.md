@@ -21,10 +21,13 @@ The API is works with the following libraries
 
 ## DEMO
 
-If you want to test this api you can try by using this link and replacing the filter parameter a location name
+If you want to test this api you can try by using this link and replacing the filter parameter the string you want search:
 
 https://mexico-states-api.herokuapp.com/filter/***filter***
 
+If you want to return all the states just enter to this link:
+
+https://mexico-states-api.herokuapp.com/
 
 ## Installation
 
