@@ -105,7 +105,6 @@ MIT
    [suffix-tree]: <https://pypi.org/project/suffix-tree/>
    [pytest]: <https://github.com/pytest-dev/pytest>
    [requests]: <https://github.com/psf/requests>
-   [python]: <>
    [PlDb]: <https://github.com/joemccann/dillinger/tree/master/plugins/dropbox/README.md>
    [PlGh]: <https://github.com/joemccann/dillinger/tree/master/plugins/github/README.md>
    [PlGd]: <https://github.com/joemccann/dillinger/tree/master/plugins/googledrive/README.md>
